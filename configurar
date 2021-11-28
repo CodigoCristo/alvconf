@@ -1,6 +1,17 @@
 #!/bin/bash
 
 ###########################################
+#	1. Crea hostname
+#	2. Crea Usuario
+#	3. Clave de root
+#	4. Pais
+#	5. Idioma
+#	6. Carpetas de usuario
+#	7. Zona horaria
+#	8. Instala Xorg
+#	9. Teclado en Xorg
+#	10. Actualiza mirrorlist
+###########################################
 # VARIABLES 
 hostname=""
 usuario=""
