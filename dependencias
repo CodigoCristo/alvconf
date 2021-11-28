@@ -1,5 +1,4 @@
 #!/bin/bash
-: 'Copyright (C) 2019 Código Cristo'
 
 clear
 pacman -Syu
@@ -13,7 +12,7 @@ pacman -S neofetch --noconfirm --needed
 pacman -S lsb-release --noconfirm --needed
 
 curl -LJO https://github.com/CodigoCristo/alvconf/archive/refs/heads/main.tar.gz
-tar  -xvf  arcrisnew-main.tar.gz
+tar  -xvf alvconf-main.tar.gz
 mv alvconf-main alvconf
 cd alvconf
 sh configurar
