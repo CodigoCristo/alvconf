@@ -10,6 +10,11 @@ pacman -S git --noconfirm --needed
 pacman -S wget --noconfirm --needed
 pacman -S neofetch --noconfirm --needed
 pacman -S lsb-release --noconfirm --needed
+
+pacman -S dhcpcd --noconfirm --needed
+pacman -S networkmanager --noconfirm --needed
+systemctl enable dhcpcd
+systemctl enable NetworkManager
 clear
 
 ###########################################
@@ -122,10 +127,10 @@ clear
 
 
 localectl --no-convert set-x11-keymap $teclado
-mkdir -p /mnt/etc/X11/xorg.conf.d
-touch /mnt/etc/X11/xorg.conf.d/00-keyboard.conf
+mkdir -p /etc/X11/xorg.conf.d
+touch /etc/X11/xorg.conf.d/00-keyboard.conf
 
-tee /mnt/etc/X11/xorg.conf.d/00-keyboard.conf <<EOF
+tee /etc/X11/xorg.conf.d/00-keyboard.conf <<EOF
 Section "InputClass"
         Identifier "system-keyboard"
         MatchIsKeyboard "on"
@@ -133,7 +138,7 @@ Section "InputClass"
 EndSection 
 EOF
 clear
-cat /mnt/etc/X11/xorg.conf.d/00-keyboard.conf
+cat /etc/X11/xorg.conf.d/00-keyboard.conf
 sleep 5
 
 
