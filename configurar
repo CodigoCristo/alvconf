@@ -1,0 +1,128 @@
+#!/bin/bash
+
+###########################################
+# VARIABLES 
+hostname=""
+usuario=""
+claveusuario=""
+claveroot=""
+teclado=""
+
+clear
+curl https://ipapi.co/timezone > zoneinfo
+zonahoraria=$(cat zoneinfo)
+clear
+curl https://ipapi.co/languages | awk -F "," '{print $1}' | sed 's/-/_/g' | sed "s|$|.UTF8|" > language
+pais=$(cat language)
+clear
+curl https://ipapi.co/languages | awk -F "," '{print $1}' | sed  -e 's/.$//' -e 's/.$//' -e 's/.$//' > keymapp
+keymap=$(cat keymapp)
+clear
+###########################################
+
+read -p "$(echo -e "1.- Introduce el nombre de tu nuevo usuario: ")" usuario 
+echo "" 
+read -p "$(echo -e "2.- Introduce la contraseña para $usuario: ")" claveusuario 
+echo "" 
+read -p "$(echo -e "3.- Introduce el nombre del equipo y/o computador (host): ")" hostname 
+echo "" 
+read -p "$(echo -e "4.- Introduce la clave root: ")" claveroot 
+echo "" 
+read -p "$(echo -e "5.- Introduce la distribución de tu teclado, ejemplo es, latam, us: ")" teclado 
+
+echo ""
+echo ""
+echo ""
+echo ""
+
+
+echo "$hostname" > /etc/hostname
+echo "127.0.1.1 $hostname.localdomain $hostname" > /etc/hosts
+echo ""
+echo "Hostname: $(cat /etc/hostname)"
+echo ""
+echo "Hosts: $(cat /etc/hosts)"
+echo ""
+sleep 5
+clear
+(echo $claveroot ; echo $claveroot) | passwd root
+useradd -m -g users -s /bin/bash $usuario
+(echo $claveusuario ; echo $claveusuario) | passwd $usuario
+sed -i "80i $usuario ALL=(ALL) ALL"  /etc/sudoers
+sleep 5
+clear
+
+
+
+echo -e ""
+echo "${pais} UTF-8" > /etc/locale.gen
+locale-gen
+
+echo "LANG=$pais" > /etc/locale.conf && cat /etc/locale.conf 
+echo "KEYMAP=$keymap" > /etc/vconsole.conf && cat /etc/vconsole.conf 
+
+sleep 5
+
+export $(cat /etc/locale.conf)
+export $(cat /etc/locale.conf)
+clear
+
+
+xdg-user-dirs-update
+sudo -u $usuario xdg-user-dirs-update
+
+ls -l /root/
+ls -l /home/$usuario/
+sleep 5
+
+
+ln -sf /usr/share/zoneinfo/$zonahoraria /etc/localtime
+timedatectl set-timezone $zonahoraria
+hwclock -w
+hwclock --hctosys
+hwclock --systohc
+sleep 2
+timedatectl status
+date +' %A, %B %d, %Y - %I:%M %p'
+sleep 5
+
+clear
+pacman -S xorg --noconfirm
+pacman -S xorg-apps --noconfirm
+pacman -S xorg-server --noconfirm
+pacman -S xorg-xinit --noconfirm
+pacman -S xorg-twm --noconfirm
+pacman -S xterm --noconfirm
+clear
+
+
+localectl --no-convert set-x11-keymap $teclado
+mkdir -p /mnt/etc/X11/xorg.conf.d
+touch /mnt/etc/X11/xorg.conf.d/00-keyboard.conf
+
+tee /mnt/etc/X11/xorg.conf.d/00-keyboard.conf <<EOF
+Section "InputClass"
+        Identifier "system-keyboard"
+        MatchIsKeyboard "on"
+        Option "XkbLayout" "$teclado"
+EndSection 
+EOF
+clear
+cat /mnt/etc/X11/xorg.conf.d/00-keyboard.conf
+sleep 5
+
+
+echo "noipv6rs" >> /etc/dhcpcd.conf
+echo "noipv6" >> /etc/dhcpcd.conf
+
+
+
+clear
+pacman -Syu --noconfirm
+clear
+reflector --verbose --latest 10 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
+cat /etc/pacman.d/mirrorlist
+sleep 5
+clear
+pacman -Syu --noconfirm
+clear

@@ -1,0 +1,18 @@
+#!/bin/bash
+: 'Copyright (C) 2019 Código Cristo'
+
+clear
+pacman -Syu
+pacman -S reflector --noconfirm --needed
+pacman -S dialog --noconfirm --needed
+pacman -S curl --noconfirm --needed
+pacman -S xdg-user-dirs --noconfirm --needed
+pacman -S git --noconfirm --needed
+pacman -S wget --noconfirm --needed
+pacman -S neofetch --noconfirm --needed
+pacman -S lsb-release --noconfirm --needed
+
+curl -LJO https://github.com/CodigoCristo/alvconf/archive/master.tar.gz
+tar  -xvf  alvconf-master.tar.gz
+cd alvconf-master
+sh configurar
