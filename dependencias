@@ -12,7 +12,7 @@ pacman -S wget --noconfirm --needed
 pacman -S neofetch --noconfirm --needed
 pacman -S lsb-release --noconfirm --needed
 
-https://github.com/CodigoCristo/alvconf/archive/refs/heads/main.tar.gz
+curl -LJO https://github.com/CodigoCristo/alvconf/archive/refs/heads/main.tar.gz
 tar  -xvf  alvconf-main.tar.gz
 cd alvconf-main
 sh configurar
